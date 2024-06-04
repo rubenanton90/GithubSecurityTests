@@ -23,8 +23,11 @@ using (var context = new TestDbContext())
 List<Foo> bulkList = new List<Foo> { new Foo { Name = "b", Surname = "brandon" }, new Foo { Name = "a", Surname = "aaronson" } };
 using (var context = new TestDbContext())
 {
-    if(Environment.GetCommandLineArgs()?.Length > 1)
+    if (Environment.GetCommandLineArgs()?.Length > 1)
+    {
         context.Database.ExecuteSqlRaw(Environment.GetCommandLineArgs()[1]);
+        context.Database.ExecuteSqlRaw($"INSERT INTO foo (text) VALUES ({Environment.GetCommandLineArgs().Last()})");
+    }
     await context.BulkInsertOrUpdateAsync(bulkList, new BulkConfig
     {
         SetOutputIdentity = true,
